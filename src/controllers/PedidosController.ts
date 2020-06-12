@@ -61,7 +61,7 @@ class PedidosController {
       itens
     } = request.body;
 
-    //verificar por que o trx não funhciona.
+    //verificar por que o trx não funciona.
     const trx = await knex.transaction();
 
     const pedido = {
@@ -77,7 +77,8 @@ class PedidosController {
       data: moment().format('YYYY-MM-DD hh:mm:ss')
     }
     
-    const idsInseridos = await knex('PEDIDO').insert(pedidoAux);
+    const idsInseridos = await trx('PEDIDO').insert(pedidoAux);
+    
     const pedido_id = idsInseridos[0];
     const itensPedido = itens.map((item: object) => {
 
@@ -89,16 +90,15 @@ class PedidosController {
     });
     
     console.log(itensPedido);
-
-    await knex('PEDIDO_ITENS').insert(itensPedido);
-
+    await trx('PEDIDO_ITENS').insert(itensPedido);
+    
+    trx.commit();
+    
+    
     return response.json({
       id: pedido_id,
       ...pedido
     });
-
-    
-
   }
 }
 export default PedidosController;
