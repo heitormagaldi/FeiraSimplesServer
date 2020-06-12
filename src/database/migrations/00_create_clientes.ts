@@ -13,8 +13,8 @@ export async function up(knex: Knex) {
     table.string('ATIVACAO', 100);
     table.boolean('ATIVO');
     table.string('CPF', 14);
-    table.decimal('LATITUDE');
-    table.decimal('LONGITUDE');
+//  table.decimal('LATITUDE');
+//  table.decimal('LONGITUDE');
 
   })
   /*
