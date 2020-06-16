@@ -14,8 +14,12 @@ const pedidosController = new PedidosController();
 //show um unico registro
 //create, update, delete
 
+
+routes.put('/produtos',produtosController.query);
 routes.get('/produtos',produtosController.index);
 routes.get('/produtos/:id',produtosController.show);
+routes.post('/produtos/',produtosController.create);
+routes.delete('/produtos/:id',produtosController.delete);
 
 routes.post('/clientes', clientesController.create);
 routes.get('/clientes/:id', clientesController.show);

@@ -92,7 +92,7 @@ class PedidosController {
     console.log(itensPedido);
     await trx('PEDIDO_ITENS').insert(itensPedido);
     
-    trx.commit();
+    await trx.commit();
     
     
     return response.json({
