@@ -20,8 +20,14 @@ class ProdutosController {
   async show(request: Request, response: Response) {
     const { id } = request.params;
 
-
-    const produto = await knex('PRODUTO').where('ID', id).first();
+    //const produto = await knex('PRODUTO')
+    const produto = await knex('PRODUTO')
+    .join('CATEGORIA','PRODUTO.CATEGORIA','=','CATEGORIA.ID')
+    .join('UNIDADE','PRODUTO.IDUNIDADE','=','UNIDADE.ID')
+    .select('PRODUTO.*',
+    'UNIDADE.DESCRICAO AS UNIDADE_NOME',
+    'CATEGORIA.NOME AS CATEGORIA_NOME')
+    .where('PRODUTO.ID', id).first();
 
     if (!produto) {
       return response.status(400).json({ message: 'Produto não encontrado' });
@@ -34,18 +40,24 @@ class ProdutosController {
 
 
     const produto = await knex('PRODUTO').where('ID', id).delete();
-
+    
     if (!produto) {
       return response.status(400).json({ message: 'Produto não encontrado' });
     }
     return response.json( {message: '100'});
   }
 
-
   async index(request: Request, response: Response) {
 
     //select * from produtos
-    const produtos = await knex('PRODUTO').select('*');
+    const produtos = await knex('PRODUTO')
+    .join('CATEGORIA','PRODUTO.CATEGORIA','=','CATEGORIA.ID')
+    .join('UNIDADE','PRODUTO.IDUNIDADE','=','UNIDADE.ID')
+    .select('PRODUTO.*',
+    'UNIDADE.DESCRICAO AS UNIDADE_NOME',
+    'CATEGORIA.NOME AS CATEGORIA_NOME');
+
+
     const serializacao = produtos.map(produtos => {
       const produtosaux = { ...produtos, IMAGEM: `http://localhost:3333/uploads/${produtos.IMAGEM}` };
       return produtosaux;
